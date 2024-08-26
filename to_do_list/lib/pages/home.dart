@@ -9,7 +9,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<Task> _tasks = [];
+  final List<Task> _incompletedTasks = [];
+  final List<Task> _completedTasks = [];
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
@@ -18,11 +19,26 @@ class _HomePageState extends State<HomePage> {
     final taskDescription = _descriptionController.text;
     if (taskTitle.isNotEmpty && taskDescription.isNotEmpty) {
       setState(() {
-        _tasks.add(Task(title: taskTitle, description: taskDescription));
+        _incompletedTasks.add(Task(title: taskTitle, description: taskDescription));
         _titleController.clear();
         _descriptionController.clear();
       });
     }
+  }
+
+// set the task as complete or incomplete
+  void _completeTask(Task task) {
+    setState(() {
+      if (task.isComplete) {
+        _completedTasks.remove(task);
+        task.isComplete = false;
+        _incompletedTasks.add(task);
+      } else {
+        _incompletedTasks.remove(task);
+        task.isComplete = true;
+        _completedTasks.add(task);
+      }
+    });
   }
 
   Future<void> _formPopup(BuildContext context) async {
@@ -53,7 +69,7 @@ class _HomePageState extends State<HomePage> {
             TextButton(
               onPressed: () {
                 _addTask();
-                Navigator.of(context).pop(); // Only pop here
+                Navigator.of(context).pop();
               },
               child: Text("Submit"),
             ),
@@ -87,9 +103,38 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+// display tasks by mapping through the list based on their completion status
   Widget _taskList() {
     return ListView(
-      children: _tasks.map((task) => TaskWidget(task: task)).toList(),
+      children: [
+        if (_incompletedTasks.isNotEmpty) ...[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Incomplete Tasks",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
+          ..._incompletedTasks.map((task) => TaskWidget(
+                task: task,
+                onComplete: _completeTask,
+              )),
+        ],
+
+        if (_completedTasks.isNotEmpty) ...[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Completed Tasks",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
+          ..._completedTasks.map((task) => TaskWidget(
+                task: task,
+                onComplete: _completeTask,
+              )),
+        ],
+      ],
     );
   }
 
@@ -125,21 +170,23 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+// widget to display the tasks
 class TaskWidget extends StatelessWidget {
   final Task task;
+  final Function(Task) onComplete;
 
-  const TaskWidget({required this.task, super.key});
+  const TaskWidget({required this.task, required this.onComplete, super.key});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(task.title),
       subtitle: Text(task.description),
-      leading: Icon(
-        task.isComplete ? Icons.check_box : Icons.check_box_outline_blank,
-        color: task.isComplete ? Colors.green : Colors.grey,
+      leading: Checkbox(
+        value: task.isComplete,
+        onChanged: (_) => onComplete(task),
       ),
-      onTap: () {},
+      onTap: () => onComplete(task),
     );
   }
 }
