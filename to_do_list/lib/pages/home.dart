@@ -21,7 +21,6 @@ class _HomePageState extends State<HomePage> {
         _tasks.add(Task(title: taskTitle, description: taskDescription));
         _titleController.clear();
         _descriptionController.clear();
-        Navigator.pop(context);
       });
     }
   }
@@ -54,7 +53,7 @@ class _HomePageState extends State<HomePage> {
             TextButton(
               onPressed: () {
                 _addTask();
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(); // Only pop here
               },
               child: Text("Submit"),
             ),
