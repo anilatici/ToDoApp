@@ -1,5 +1,8 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do_list/models/task.dart';
+import 'package:firebase_core/firebase_core.dart';
+import '../firebase_options.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,12 +17,18 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
+  late DatabaseReference _dbRef = FirebaseDatabase.instance.ref().child("tasks");
+
   void _addTask() {
     final taskTitle = _titleController.text;
     final taskDescription = _descriptionController.text;
     if (taskTitle.isNotEmpty && taskDescription.isNotEmpty) {
       setState(() {
-        _incompletedTasks.add(Task(title: taskTitle, description: taskDescription));
+        _dbRef.push().set({
+          "title": taskTitle,
+          "description": taskDescription,
+          "isComplete": false,
+        });
         _titleController.clear();
         _descriptionController.clear();
       });
