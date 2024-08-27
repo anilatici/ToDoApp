@@ -1,10 +1,16 @@
+import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do_list/models/task.dart';
 
 class IncompleteTasksScreen extends StatelessWidget {
-  final List<Task> tasks;
+  final Query _dbRef = FirebaseDatabase.instance
+      .ref()
+      .child('tasks')
+      .orderByChild('isComplete')
+      .equalTo(false);
 
-  const IncompleteTasksScreen({super.key, required this.tasks});
+  IncompleteTasksScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,27 +18,28 @@ class IncompleteTasksScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Incomplete Tasks"),
       ),
-      body: incompletedTasksList(),
-    );
-  }
+      body: FirebaseAnimatedList(
+        query: _dbRef,
+        itemBuilder: (BuildContext context, DataSnapshot snapshot,
+            Animation<double> animation, int index) {
+          Map taskMap = snapshot.value as Map;
+          Task task = Task(
+            title: taskMap['title'],
+            description: taskMap['description'],
+            isComplete: taskMap['isComplete'],
+          );
 
-  Widget incompletedTasksList() {
-
-    final incompleteTasks = tasks.where((task) => !task.isComplete).toList();
-
-    return ListView.builder(
-      itemCount: incompleteTasks.length,
-      itemBuilder: (context, index) {
-        final task = incompleteTasks[index];
-        return ListTile(
-          title: Text(task.title),
-          subtitle: Text(task.description),
-          trailing: Icon(
-            Icons.check_box_outline_blank,
-            color: Colors.grey,
-          ),
-        );
-      },
+          return ListTile(
+            title: Text(task.title),
+            subtitle: Text(task.description),
+            trailing: Checkbox(
+              value: task.isComplete,
+              onChanged: (bool? value) {
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 }
