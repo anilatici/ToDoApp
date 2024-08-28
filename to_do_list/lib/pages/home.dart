@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do_list/models/task.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:to_do_list/pages/incomplete_tasks.dart';
 import '../firebase_options.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,7 +19,8 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
-  late DatabaseReference _dbRef = FirebaseDatabase.instance.ref().child("tasks");
+  late DatabaseReference _dbRef =
+      FirebaseDatabase.instance.ref().child("tasks");
 
   void _addTask() {
     final taskTitle = _titleController.text;
@@ -100,34 +102,39 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: MyAppBar(),
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            SizedBox(
-              height:125.0,
-              child: DrawerHeader(
-                decoration: ShapeDecoration(
-                  color: Colors.grey,
-                  shape: SmoothRectangleBorder(
+          child: ListView(padding: EdgeInsets.zero, children: [
+        SizedBox(
+          height: 125.0,
+          child: DrawerHeader(
+            decoration: ShapeDecoration(
+                color: Colors.grey,
+                shape: SmoothRectangleBorder(
                     borderRadius: SmoothBorderRadius(
-                      cornerRadius: 10,
-                      cornerSmoothing: 0.5,
-                    )
-                  )
-                ),
-                child: const Text('To Do Menu'),
-              ),
-            ),
-            ListTile(
-              title: const Text('Home'),
-              onTap: () {
-                HomePage();
-                Navigator.pop(context);
-              }
-            )
-          ]
-        )
-      ),
+                  cornerRadius: 10,
+                  cornerSmoothing: 0.5,
+                ))),
+            child: const Text('To Do Menu'),
+          ),
+        ),
+        ListTile(
+          title: const Text('Home Page'),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          },
+        ),
+        ListTile(
+          title: const Text('Incomplete Tasks'),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => IncompleteTasksScreen()),
+            );
+          },
+        ),
+      ])),
       body: Column(
         children: [
           Expanded(child: _taskList()),
@@ -159,7 +166,6 @@ class _HomePageState extends State<HomePage> {
                 onComplete: _completeTask,
               )),
         ],
-
         if (_completedTasks.isNotEmpty) ...[
           Padding(
             padding: const EdgeInsets.all(8.0),
