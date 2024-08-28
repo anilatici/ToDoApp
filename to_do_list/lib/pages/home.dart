@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do_list/models/task.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:to_do_list/pages/complete_tasks.dart';
 import 'package:to_do_list/pages/incomplete_tasks.dart';
 import '../firebase_options.dart';
 
@@ -131,6 +132,15 @@ class _HomePageState extends State<HomePage> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => IncompleteTasksScreen()),
+            );
+          },
+        ),
+        ListTile(
+          title: const Text('Completed Tasks'),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CompletedTasksScreen()),
             );
           },
         ),
