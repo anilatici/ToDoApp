@@ -1,3 +1,4 @@
+import 'package:figma_squircle/figma_squircle.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do_list/models/task.dart';
@@ -98,6 +99,35 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            SizedBox(
+              height:125.0,
+              child: DrawerHeader(
+                decoration: ShapeDecoration(
+                  color: Colors.grey,
+                  shape: SmoothRectangleBorder(
+                    borderRadius: SmoothBorderRadius(
+                      cornerRadius: 10,
+                      cornerSmoothing: 0.5,
+                    )
+                  )
+                ),
+                child: const Text('To Do Menu'),
+              ),
+            ),
+            ListTile(
+              title: const Text('Home'),
+              onTap: () {
+                HomePage();
+                Navigator.pop(context);
+              }
+            )
+          ]
+        )
+      ),
       body: Column(
         children: [
           Expanded(child: _taskList()),
@@ -160,21 +190,6 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.white,
       elevation: 0,
       centerTitle: true,
-      leading: GestureDetector(
-        onTap: () {},
-        child: Container(
-          margin: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.black,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Icon(
-            Icons.menu,
-            color: Colors.white,
-            size: 24,
-          ),
-        ),
-      ),
     );
   }
 }
