@@ -22,7 +22,8 @@ class IncompleteTasksScreen extends StatelessWidget {
         query: _dbRef,
         itemBuilder: (BuildContext context, DataSnapshot snapshot,
             Animation<double> animation, int index) {
-          Map taskMap = snapshot.value as Map;
+          Map<String, dynamic> taskMap = Map<String, dynamic>.from(snapshot.value as Map);
+
           Task task = Task(
             title: taskMap['title'],
             description: taskMap['description'],
