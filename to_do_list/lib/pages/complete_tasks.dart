@@ -2,6 +2,7 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do_list/models/task.dart';
+import 'package:to_do_list/pages/task_in_detail.dart';
 
 class CompletedTasksScreen extends StatelessWidget {
   final Query _dbRef = FirebaseDatabase.instance
@@ -22,7 +23,8 @@ class CompletedTasksScreen extends StatelessWidget {
         query: _dbRef,
         itemBuilder: (BuildContext context, DataSnapshot snapshot,
             Animation<double> animation, int index) {
-          Map<String, dynamic> taskMap = Map<String, dynamic>.from(snapshot.value as Map);
+          Map<String, dynamic> taskMap =
+              Map<String, dynamic>.from(snapshot.value as Map);
           Task task = Task(
             title: taskMap['title'],
             description: taskMap['description'],
@@ -42,6 +44,15 @@ class CompletedTasksScreen extends StatelessWidget {
                     .update({'isComplete': value ?? false});
               },
             ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      DetailedTaskScreen(task: task, taskID: snapshot.key!),
+                ),
+              );
+            },
           );
         },
       ),

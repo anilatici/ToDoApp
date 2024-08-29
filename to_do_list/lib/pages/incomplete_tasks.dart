@@ -2,6 +2,7 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do_list/models/task.dart';
+import 'package:to_do_list/pages/task_in_detail.dart';
 
 class IncompleteTasksScreen extends StatelessWidget {
   final Query _dbRef = FirebaseDatabase.instance
@@ -41,6 +42,15 @@ class IncompleteTasksScreen extends StatelessWidget {
                     .update({'isComplete': value ?? false});
               },
             ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      DetailedTaskScreen(task: task, taskID: snapshot.key!),
+                ),
+              );
+            },
           );
         },
       ),
