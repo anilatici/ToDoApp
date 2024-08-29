@@ -11,7 +11,7 @@ class CompletedTasksScreen extends StatelessWidget {
       .orderByChild('isComplete')
       .equalTo(true);
 
-  CompletedTasksScreen({Key? key}) : super(key: key);
+  CompletedTasksScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -7,7 +7,7 @@ class DetailedTaskScreen extends StatelessWidget {
   final Task task;
   final String taskID;
 
-  DetailedTaskScreen({required this.task, required this.taskID});
+  const DetailedTaskScreen({super.key, required this.task, required this.taskID});
 
 
   
@@ -24,14 +24,14 @@ class DetailedTaskScreen extends StatelessWidget {
           children: [
             Text(
               task.title,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               task.description,
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               children: [
                 const Text("Status: "),
@@ -44,7 +44,7 @@ class DetailedTaskScreen extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

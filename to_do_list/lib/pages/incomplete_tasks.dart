@@ -11,7 +11,7 @@ class IncompleteTasksScreen extends StatelessWidget {
       .orderByChild('isComplete')
       .equalTo(false);
 
-  IncompleteTasksScreen({Key? key}) : super(key: key);
+  IncompleteTasksScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
